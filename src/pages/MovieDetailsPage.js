@@ -14,6 +14,7 @@ const MovieDetailsPage = () => {
       try {
         const data = await fetchMovieDetailsById(movieId);
         setMovieInfo(data);
+        // console.log(data);
       } catch (error) {
         console.log(error.message);
       }
@@ -28,10 +29,10 @@ const MovieDetailsPage = () => {
       <ul>
         <p>Additional information</p>
         <li>
-          <Link to="/cast">Cast</Link>
+          <Link to="cast">Cast</Link>
         </li>
         <li>
-          <Link to="/reviews">Reviews</Link>
+          <Link to="reviews">Reviews</Link>
         </li>
       </ul>
       <Outlet />

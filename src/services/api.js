@@ -11,8 +11,15 @@ export const fetchTrendingMovies = async () => {
 
 export const fetchMovieDetailsById = async movieId => {
   const response = await axios.get(
-    `https://api.themoviedb.org/3/movie/${Number(movieId)}?language=en-US`
+    `https://api.themoviedb.org/3/movie/${Number(
+      movieId
+    )}?api_key=${API_KEY}&language=en-US`
   );
 
   return response.data;
 };
+
+// export const fetchMoviesByQuery = async query => {
+//   const response = await axios.get();
+//   return response.data;
+// };
