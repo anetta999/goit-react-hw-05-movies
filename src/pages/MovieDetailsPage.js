@@ -1,5 +1,5 @@
 import { MovieDetails } from 'components/MovieDetails/MovieDetails';
-import { useParams } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import { fetchMovieDetailsById } from 'services/api';
 import { useState, useEffect } from 'react';
 
@@ -25,6 +25,16 @@ const MovieDetailsPage = () => {
   return (
     <>
       <MovieDetails movieInfo={movieInfo} />
+      <ul>
+        <p>Additional information</p>
+        <li>
+          <Link to="/cast">Cast</Link>
+        </li>
+        <li>
+          <Link to="/reviews">Reviews</Link>
+        </li>
+      </ul>
+      <Outlet />
     </>
   );
 };
