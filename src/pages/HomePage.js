@@ -1,5 +1,6 @@
 import { MoviesList } from 'components/MoviesList/MoviesList';
 import { useState, useEffect } from 'react';
+
 import { fetchTrendingMovies } from 'services/api';
 
 const HomePage = () => {
@@ -18,7 +19,12 @@ const HomePage = () => {
     getTrendingMovies();
   }, []);
 
-  return <MoviesList movies={movies} />;
+  return (
+    <>
+      <h2>Trending today</h2>
+      <MoviesList movies={movies} />
+    </>
+  );
 };
 
 export default HomePage;

@@ -6,7 +6,7 @@ import { fetchMoviesByQuery } from 'services/api';
 
 const MoviesPage = () => {
   const [movies, setMovies] = useState([]);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query') ?? '';
 
   useEffect(() => {
@@ -24,9 +24,21 @@ const MoviesPage = () => {
     getMoviesListByQuery();
   }, [query]);
 
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    const inputValue = evt.currentTarget.elements.query.value;
+
+    if (inputValue === '') {
+      alert('Searchfield cannot be empty, please enter the film name');
+      return;
+    }
+
+    setSearchParams({ query: inputValue });
+    evt.currentTarget.reset();
+  };
   return (
     <div>
-      <Searchbar />
+      <Searchbar onSubmit={handleSubmit} />
       {movies.length > 0 && <MoviesList movies={movies} />}
     </div>
   );

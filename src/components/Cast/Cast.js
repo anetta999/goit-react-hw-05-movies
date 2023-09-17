@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 const defaultImg =
   'https://png.pngitem.com/pimgs/s/508-5087257_clip-art-hd-png-download.png';
 
-export const Cast = () => {
+const Cast = () => {
   const { movieId } = useParams();
   //   console.log(movieId);
   const [actors, setActors] = useState([]);
@@ -45,7 +45,7 @@ export const Cast = () => {
                   height={278}
                 />
                 <p>{name}</p>
-                <p>Character: {character}</p>
+                <p>Character: {character ? character : 'not mentioned'}</p>
               </li>
             );
           })}
@@ -54,3 +54,5 @@ export const Cast = () => {
     </>
   );
 };
+
+export default Cast;
