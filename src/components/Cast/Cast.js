@@ -1,14 +1,21 @@
 import { useParams } from 'react-router-dom';
 import { fetchCastById } from 'services/api';
 import { useState, useEffect } from 'react';
+import {
+  CastCardFooter,
+  CastList,
+  CastListItem,
+  CastText,
+} from './Cast.styled';
 
 const defaultImg =
   'https://png.pngitem.com/pimgs/s/508-5087257_clip-art-hd-png-download.png';
 
 const Cast = () => {
   const { movieId } = useParams();
-  //   console.log(movieId);
   const [actors, setActors] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!movieId) {
@@ -17,10 +24,14 @@ const Cast = () => {
 
     const getActorsList = async () => {
       try {
+        setLoading(true);
+        setError(false);
         const { cast } = await fetchCastById(movieId);
         setActors(cast);
       } catch (error) {
-        console.log(error.message);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -29,27 +40,37 @@ const Cast = () => {
 
   return (
     <>
+      {loading && <p>LOADING</p>}
+      {error && !loading && (
+        <p>Something went wrong, please try reloading the page</p>
+      )}
       {actors && (
-        <ul>
+        <CastList>
           {actors.map(({ profile_path, name, character, id }) => {
             return (
-              <li key={id}>
-                <img
-                  src={
-                    profile_path
-                      ? `https://image.tmdb.org/t/p/w185/${profile_path}`
-                      : defaultImg
-                  }
-                  alt={name}
-                  width={185}
-                  height={278}
-                />
-                <p>{name}</p>
-                <p>Character: {character ? character : 'not mentioned'}</p>
-              </li>
+              <CastListItem key={id}>
+                <div>
+                  <img
+                    src={
+                      profile_path
+                        ? `https://image.tmdb.org/t/p/w185/${profile_path}`
+                        : defaultImg
+                    }
+                    alt={name}
+                    width={185}
+                    height={278}
+                  />
+                </div>
+                <CastCardFooter>
+                  <CastText>{name}</CastText>
+                  <CastText>
+                    Character: {character ? character : 'not mentioned'}
+                  </CastText>
+                </CastCardFooter>
+              </CastListItem>
             );
           })}
-        </ul>
+        </CastList>
       )}
     </>
   );

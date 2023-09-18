@@ -1,3 +1,14 @@
+import {
+  MovieCard,
+  MovieCardText,
+  MovieSecondSubTitle,
+  MovieSubTitle,
+  MovieTitle,
+  GenresText,
+  GenresItem,
+  MovieImg,
+} from './MovieDetails.styled';
+
 const defaultImg =
   'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
 
@@ -13,8 +24,8 @@ export const MovieDetails = ({ movieInfo }) => {
   const userScorePercentage = Math.round((vote_average * 100) / 10);
 
   return (
-    <div>
-      <img
+    <MovieCard>
+      <MovieImg
         src={
           poster_path
             ? `https://image.tmdb.org/t/p/w500/${poster_path}`
@@ -23,27 +34,31 @@ export const MovieDetails = ({ movieInfo }) => {
         width={250}
         alt="poster"
       />
-      <h1>
-        {title} (
-        {release_date ? getReleaseYear(release_date) : 'not published yet'})
-      </h1>
-      <p>User score: {userScorePercentage}%</p>
-      <h2>Overview</h2>
-      <p>{overview ? overview : 'not published yet'}</p>
-      <h3>Genres</h3>
-      {genres?.length > 0 ? (
-        <ul>
-          {genres.map(({ id, name }) => {
-            return (
-              <li key={id}>
-                <p>{name}</p>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <p>not published yet</p>
-      )}
-    </div>
+      <div>
+        <MovieTitle>
+          {title} (
+          {release_date ? getReleaseYear(release_date) : 'not published yet'})
+        </MovieTitle>
+        <MovieCardText>User score: {userScorePercentage}%</MovieCardText>
+        <MovieSubTitle>Overview</MovieSubTitle>
+        <MovieCardText>
+          {overview ? overview : 'not published yet'}
+        </MovieCardText>
+        <MovieSecondSubTitle>Genres</MovieSecondSubTitle>
+        {genres?.length > 0 ? (
+          <ul>
+            {genres.map(({ id, name }) => {
+              return (
+                <GenresItem key={id}>
+                  <GenresText>{name}</GenresText>
+                </GenresItem>
+              );
+            })}
+          </ul>
+        ) : (
+          <MovieCardText>not published yet</MovieCardText>
+        )}
+      </div>
+    </MovieCard>
   );
 };

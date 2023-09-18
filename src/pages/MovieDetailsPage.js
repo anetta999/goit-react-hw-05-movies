@@ -2,23 +2,41 @@ import { MovieDetails } from 'components/MovieDetails/MovieDetails';
 import { Link, Outlet, useParams, useLocation } from 'react-router-dom';
 import { fetchMovieDetailsById } from 'services/api';
 import { useState, useEffect, useRef, Suspense } from 'react';
+import {
+  AdditionalInfoLink,
+  GoBackBtn,
+} from 'components/Searchbar/Searchbar.styled';
+import { Container } from 'components/Container';
+import {
+  AdditionalInfoSection,
+  StyledSection,
+} from 'components/Section.styled';
+import {
+  AdditionalInfoListItem,
+  AdditionalInfoTitle,
+} from './MovieDetailsPage.styled';
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const location = useLocation();
   const backLinkLocationRef = useRef(location.state?.from ?? '/movies');
-  // console.log(movieId);
-  const [movieInfo, setMovieInfo] = useState({});
+
+  const [movieInfo, setMovieInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!movieId) return;
     const getMovieInfoById = async () => {
       try {
+        setLoading(true);
+        setError(false);
         const data = await fetchMovieDetailsById(movieId);
         setMovieInfo(data);
-        // console.log(data);
       } catch (error) {
-        console.log(error.message);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -27,22 +45,43 @@ const MovieDetailsPage = () => {
 
   return (
     <>
-      <button type="button">
-        <Link to={backLinkLocationRef.current}>Go back</Link>
-      </button>
-      <MovieDetails movieInfo={movieInfo} />
-      <ul>
-        <p>Additional information</p>
-        <li>
-          <Link to="cast">Cast</Link>
-        </li>
-        <li>
-          <Link to="reviews">Reviews</Link>
-        </li>
-      </ul>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Outlet />
-      </Suspense>
+      {loading && <p>LOADING</p>}
+      {error && !loading && (
+        <p>Something went wrong, please try reloading the page</p>
+      )}
+      <StyledSection>
+        <Container>
+          <Link to={backLinkLocationRef.current}>
+            <GoBackBtn type="button">Go back</GoBackBtn>
+          </Link>
+
+          {movieInfo && <MovieDetails movieInfo={movieInfo} />}
+        </Container>
+      </StyledSection>
+      <AdditionalInfoSection>
+        <Container>
+          <ul>
+            <AdditionalInfoTitle>Additional information</AdditionalInfoTitle>
+            <AdditionalInfoListItem>
+              <Link to="cast">
+                <AdditionalInfoLink type="button">Cast</AdditionalInfoLink>
+              </Link>
+            </AdditionalInfoListItem>
+            <AdditionalInfoListItem>
+              <Link to="reviews">
+                <AdditionalInfoLink type="button">Reviews</AdditionalInfoLink>
+              </Link>
+            </AdditionalInfoListItem>
+          </ul>
+        </Container>
+      </AdditionalInfoSection>
+      <StyledSection>
+        <Container>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Outlet />
+          </Suspense>
+        </Container>
+      </StyledSection>
     </>
   );
 };

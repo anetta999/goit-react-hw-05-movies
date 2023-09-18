@@ -1,8 +1,10 @@
+import { StyledForm, StyledInput, SubmitBtn } from './Searchbar.styled';
+
 export const Searchbar = ({ onSubmit }) => {
   return (
-    <form onSubmit={onSubmit}>
-      <input type="text" name="query" autoFocus="on" autoComplete="on" />
-      <button type="submit">Search</button>
-    </form>
+    <StyledForm onSubmit={onSubmit}>
+      <StyledInput type="text" name="query" autoFocus="on" autoComplete="on" />
+      <SubmitBtn type="submit">Search</SubmitBtn>
+    </StyledForm>
   );
 };
