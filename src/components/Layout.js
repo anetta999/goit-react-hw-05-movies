@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { Container } from './Container';
 import { GlobalStyle } from './Globalstyle';
 import { StyledHeader, NavList, StyledLink } from './Layout.styled';
+import { Loader } from './Loader/Loader';
 
 export const Layout = () => {
   return (
@@ -22,7 +23,7 @@ export const Layout = () => {
         </Container>
       </StyledHeader>
       <main>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loader />}>
           <Outlet />
         </Suspense>
       </main>

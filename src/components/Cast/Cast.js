@@ -7,6 +7,9 @@ import {
   CastListItem,
   CastText,
 } from './Cast.styled';
+import { Loader } from 'components/Loader/Loader';
+import toast, { Toaster } from 'react-hot-toast';
+import { ReviesNotification } from 'pages/HomePage.styled';
 
 const defaultImg =
   'https://png.pngitem.com/pimgs/s/508-5087257_clip-art-hd-png-download.png';
@@ -40,11 +43,13 @@ const Cast = () => {
 
   return (
     <>
-      {loading && <p>LOADING</p>}
-      {error && !loading && (
-        <p>Something went wrong, please try reloading the page</p>
-      )}
-      {actors && (
+      {loading && <Loader />}
+      {error &&
+        !loading &&
+        toast.error('Something went wrong, please try reloading the page', {
+          duration: 5000,
+        })}
+      {actors.length > 0 ? (
         <CastList>
           {actors.map(({ profile_path, name, character, id }) => {
             return (
@@ -71,7 +76,12 @@ const Cast = () => {
             );
           })}
         </CastList>
+      ) : (
+        <ReviesNotification>
+          The list of actors is temporarily empty for this movie
+        </ReviesNotification>
       )}
+      <Toaster position="top-right" />
     </>
   );
 };

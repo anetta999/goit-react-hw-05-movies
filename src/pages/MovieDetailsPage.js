@@ -15,6 +15,8 @@ import {
   AdditionalInfoListItem,
   AdditionalInfoTitle,
 } from './MovieDetailsPage.styled';
+import { Loader } from 'components/Loader/Loader';
+import toast, { Toaster } from 'react-hot-toast';
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
@@ -45,10 +47,12 @@ const MovieDetailsPage = () => {
 
   return (
     <>
-      {loading && <p>LOADING</p>}
-      {error && !loading && (
-        <p>Something went wrong, please try reloading the page</p>
-      )}
+      {loading && <Loader />}
+      {error &&
+        !loading &&
+        toast.error('Something went wrong, please try reloading the page', {
+          duration: 5000,
+        })}
       <StyledSection>
         <Container>
           <Link to={backLinkLocationRef.current}>
@@ -77,11 +81,12 @@ const MovieDetailsPage = () => {
       </AdditionalInfoSection>
       <StyledSection>
         <Container>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loader />}>
             <Outlet />
           </Suspense>
         </Container>
       </StyledSection>
+      <Toaster position="top-right" />
     </>
   );
 };

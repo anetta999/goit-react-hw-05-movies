@@ -1,10 +1,12 @@
 import { Container } from 'components/Container';
+import { Loader } from 'components/Loader/Loader';
 import { MoviesList } from 'components/MoviesList/MoviesList';
 import { Searchbar } from 'components/Searchbar/Searchbar';
 import { StyledSection } from 'components/Section.styled';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fetchMoviesByQuery } from 'services/api';
+import toast, { Toaster } from 'react-hot-toast';
 
 const MoviesPage = () => {
   const [movies, setMovies] = useState([]);
@@ -25,8 +27,11 @@ const MoviesPage = () => {
         const { results } = await fetchMoviesByQuery(query);
         setMovies(results);
         if (!results.length) {
-          alert(
-            'No films found matching your search query, please change your request and try again'
+          toast.error(
+            'No films found matching your search query, please change your request and try again',
+            {
+              duration: 5000,
+            }
           );
           return;
         }
@@ -44,7 +49,12 @@ const MoviesPage = () => {
     const inputValue = evt.currentTarget.elements.query.value;
 
     if (inputValue === '') {
-      alert('Searchfield cannot be empty, please enter the film name');
+      toast.error(
+        'No films found matching your search query, please change your request and try again',
+        {
+          duration: 5000,
+        }
+      );
       return;
     }
 
@@ -52,18 +62,21 @@ const MoviesPage = () => {
     evt.currentTarget.reset();
   };
   return (
-    <div>
+    <>
       <StyledSection>
         <Container>
           <Searchbar onSubmit={handleSubmit} />
           {movies.length > 0 && <MoviesList movies={movies} />}
         </Container>
       </StyledSection>
-      {loading && <p>LOADING</p>}
-      {error && !loading && (
-        <p>Something went wrong, please try reloading the page</p>
-      )}
-    </div>
+      {loading && <Loader />}
+      {error &&
+        !loading &&
+        toast.error('Something went wrong, please try reloading the page', {
+          duration: 5000,
+        })}
+      <Toaster position="top-right" />
+    </>
   );
 };
 

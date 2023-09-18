@@ -1,8 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { fetchReviewsById } from 'services/api';
+import toast, { Toaster } from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 import { ReviewsListItem, ReviewsText, ReviewsTitle } from './Reviews.styled';
 import { ReviesNotification } from 'pages/HomePage.styled';
+import { Loader } from 'components/Loader/Loader';
 
 const Reviews = () => {
   const { movieId } = useParams();
@@ -28,10 +30,12 @@ const Reviews = () => {
 
   return (
     <>
-      {loading && <p>LOADING</p>}
-      {error && !loading && (
-        <p>Something went wrong, please try reloading the page</p>
-      )}
+      {loading && <Loader />}
+      {error &&
+        !loading &&
+        toast.error('Something went wrong, please try reloading the page', {
+          duration: 5000,
+        })}
       {reviews.length > 0 ? (
         <ul>
           {reviews.map(({ author, content, id }) => {
@@ -48,6 +52,7 @@ const Reviews = () => {
           We don't have any reviews for this movie
         </ReviesNotification>
       )}
+      <Toaster position="top-right" />
     </>
   );
 };
